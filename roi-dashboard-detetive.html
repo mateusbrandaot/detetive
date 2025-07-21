@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard ROI - Detetive Veicular</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -20,7 +21,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -44,6 +45,42 @@
         .header p {
             font-size: 1.1em;
             opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            color: #2c3e50;
+            background: rgba(44, 62, 80, 0.05);
+        }
+
+        .nav-tab.active {
+            color: #2c3e50;
+            border-bottom-color: #3498db;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
         
         .metrics-grid {
@@ -80,25 +117,11 @@
             letter-spacing: 1px;
         }
         
-        .roi-positive {
-            color: #27ae60;
-        }
-        
-        .roi-negative {
-            color: #e74c3c;
-        }
-        
-        .revenue {
-            color: #3498db;
-        }
-        
-        .costs {
-            color: #e67e22;
-        }
-        
-        .profit {
-            color: #9b59b6;
-        }
+        .roi-positive { color: #27ae60; }
+        .roi-negative { color: #e74c3c; }
+        .revenue { color: #3498db; }
+        .costs { color: #e67e22; }
+        .profit { color: #9b59b6; }
         
         .charts-container {
             padding: 30px;
@@ -126,6 +149,183 @@
             position: relative;
             height: 300px;
         }
+
+        .historical-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .filters-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .clear-filters {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .clear-filters:hover {
+            background: #c0392b;
+        }
+
+        .historical-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .table-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .records-count {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        th:hover {
+            background: #e9ecef;
+        }
+
+        th i {
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pagination button:hover {
+            background: #f8f9fa;
+        }
+
+        .pagination button.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         
         .footer {
             background: #2c3e50;
@@ -151,6 +351,28 @@
             .header h1 {
                 font-size: 2em;
             }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            th, td {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -158,174 +380,598 @@
     <div class="container">
         <div class="header">
             <h1>Dashboard ROI - Detetive Veicular</h1>
-            <p>Dashboard de análise de ROI e performance financeira</p>
+            <p>Dashboard completo de análise de ROI com dados históricos e filtragem avançada</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">
+                <i class="fas fa-chart-line"></i> Visão Geral
+            </button>
+            <button class="nav-tab" onclick="showTab('historical')">
+                <i class="fas fa-table"></i> Dados Históricos
+            </button>
+            <button class="nav-tab" onclick="showTab('trends')">
+                <i class="fas fa-chart-area"></i> Tendências
+            </button>
         </div>
         
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value roi-positive">
-                    0.00%
+        <div id="overview" class="tab-content active">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value roi-positive">
+                        0.00%
+                    </div>
+                    <div class="metric-label">ROI Atual</div>
                 </div>
-                <div class="metric-label">ROI</div>
+                
+                <div class="metric-card">
+                    <div class="metric-value revenue">
+                        R$ 662,10
+                    </div>
+                    <div class="metric-label">Faturamento</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value costs">
+                        R$ 0,00
+                    </div>
+                    <div class="metric-label">Custos</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value profit">
+                        R$ 662,10
+                    </div>
+                    <div class="metric-label">Resultado Líquido</div>
+                </div>
             </div>
             
-            <div class="metric-card">
-                <div class="metric-value revenue">
-                    R$ 662,10
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-title">Distribuição de Custos vs Receita</div>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
                 </div>
-                <div class="metric-label">Faturamento</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-value costs">
-                    R$ 0,00
+                
+                <div class="chart-card">
+                    <div class="chart-title">Comparativo Financeiro</div>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
                 </div>
-                <div class="metric-label">Custos</div>
-            </div>
-            
-            <div class="metric-card">
-                <div class="metric-value profit">
-                    R$ 662,10
-                </div>
-                <div class="metric-label">Resultado Líquido</div>
             </div>
         </div>
-        
-        <div class="charts-container">
-            <div class="chart-card">
-                <div class="chart-title">Distribuição de Custos vs Receita</div>
-                <div class="chart-container">
-                    <canvas id="pieChart"></canvas>
+
+        <div id="historical" class="tab-content">
+            <div class="historical-section">
+                <div class="filters-container">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>Data Inicial:</label>
+                            <input type="date" id="dateStart" onchange="applyFilters()">
+                        </div>
+                        <div class="filter-group">
+                            <label>Data Final:</label>
+                            <input type="date" id="dateEnd" onchange="applyFilters()">
+                        </div>
+                        <div class="filter-group">
+                            <label>Performance ROI:</label>
+                            <select id="roiFilter" onchange="applyFilters()">
+                                <option value="">Todos</option>
+                                <option value="positive">Positivo (>0%)</option>
+                                <option value="negative">Negativo (<0%)</option>
+                                <option value="high">Alto (>10%)</option>
+                                <option value="medium">Médio (0-10%)</option>
+                                <option value="low">Baixo (<0%)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Mês:</label>
+                            <select id="monthFilter" onchange="applyFilters()">
+                                <option value="">Todos os meses</option>
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" class="search-input" 
+                               placeholder="Buscar nos dados históricos..." onkeyup="applyFilters()">
+                        <button class="clear-filters" onclick="clearFilters()">
+                            <i class="fas fa-times"></i> Limpar Filtros
+                        </button>
+                    </div>
+                </div>
+
+                <div class="historical-table">
+                    <div class="table-header">
+                        <div class="table-title">Histórico de ROI</div>
+                        <div class="records-count" id="recordsCount">0 registros encontrados</div>
+                    </div>
+                    <div class="table-container">
+                        <table id="historicalTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('date')">Data <i class="fas fa-sort"></i></th>
+                                    <th onclick="sortTable('roi')">ROI (%) <i class="fas fa-sort"></i></th>
+                                    <th onclick="sortTable('revenue')">Receita <i class="fas fa-sort"></i></th>
+                                    <th onclick="sortTable('costs')">Custos <i class="fas fa-sort"></i></th>
+                                    <th onclick="sortTable('profit')">Lucro Líquido <i class="fas fa-sort"></i></th>
+                                    <th onclick="sortTable('margin')">Margem (%) <i class="fas fa-sort"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="pagination">
+                    </div>
                 </div>
             </div>
-            
-            <div class="chart-card">
-                <div class="chart-title">Evolução do ROI</div>
-                <div class="chart-container">
-                    <canvas id="lineChart"></canvas>
+        </div>
+
+        <div id="trends" class="tab-content">
+            <div class="charts-container">
+                <div class="chart-card" style="grid-column: 1 / -1;">
+                    <div class="chart-title">Evolução do ROI ao Longo do Tempo</div>
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="lineChart"></canvas>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="chart-card">
-                <div class="chart-title">Comparativo Financeiro</div>
-                <div class="chart-container">
-                    <canvas id="barChart"></canvas>
+                
+                <div class="chart-card">
+                    <div class="chart-title">ROI por Mês</div>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">Distribuição de Performance</div>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="footer">
             <div class="timestamp">
-                Última atualização: 21/07/2025, 16:48:20
+                Última atualização: 21/07/2025, 16:57:39 | 
+                1 registros históricos disponíveis
             </div>
         </div>
     </div>
 
     <script>
-        // Pie Chart - Custos vs Receita
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Receita', 'Custos'],
-                datasets: [{
-                    data: [662.0999999999995, 0],
-                    backgroundColor: ['#3498db', '#e67e22'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
+        // Global data
+        const historicalData = [{"date":"2025-07-21","time":"15:49","dayOfWeek":"segunda-feira","roiPercentage":"128.19%","netResult":"145,613217","revenue":"662,1","googleAdsCosts":"500,390783","apiCosts":"16,096","totalCosts":"516,486783","sheetName":"Julho 2025","month":"Julho","year":2025,"timestamp":1753112940000}];
+        let filteredData = [...historicalData];
+        let sortColumn = '';
+        let sortDirection = 'asc';
+        const recordsPerPage = 50;
+        let currentPage = 1;
 
-        // Line Chart - Evolução do ROI (simulada se não houver dados mensais)
-        const lineCtx = document.getElementById('lineChart').getContext('2d');
-        const monthlyData = [];
-        const hasMonthlyData = monthlyData && monthlyData.length > 0;
-        
-        const lineLabels = hasMonthlyData 
-            ? monthlyData.map(item => item.mes || item.month || item.label)
-            : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-        const roiValues = hasMonthlyData
-            ? monthlyData.map(item => item.roi || item.percentualROI || 0)
-            : [0, 0, 0, 0, 0, 0];
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Initialize charts when tabs are shown
+            setTimeout(() => {
+                if (tabName === 'overview') {
+                    initOverviewCharts();
+                } else if (tabName === 'trends') {
+                    initTrendCharts();
+                }
+            }, 100);
+        }
 
-        new Chart(lineCtx, {
-            type: 'line',
-            data: {
-                labels: lineLabels,
-                datasets: [{
-                    label: 'ROI (%)',
-                    data: roiValues,
-                    borderColor: '#27ae60',
-                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+        // Initialize overview charts
+        function initOverviewCharts() {
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Receita', 'Custos'],
+                    datasets: [{
+                        data: [662.0999999999995, 0],
+                        backgroundColor: ['#3498db', '#e67e22'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value + '%';
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Bar Chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Faturamento', 'Custos', 'Resultado Líquido'],
+                    datasets: [{
+                        data: [662.0999999999995, 0, 662.0999999999995],
+                        backgroundColor: ['#3498db', '#e67e22', '#9b59b6'],
+                        borderWidth: 0,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
-        // Bar Chart - Comparativo
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Faturamento', 'Custos', 'Resultado Líquido'],
-                datasets: [{
-                    data: [662.0999999999995, 0, 662.0999999999995],
-                    backgroundColor: ['#3498db', '#e67e22', '#9b59b6'],
-                    borderWidth: 0,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+        // Initialize trend charts
+        function initTrendCharts() {
+            if (historicalData.length === 0) return;
+
+            // Line Chart - ROI Evolution
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            const sortedData = [...historicalData].sort((a, b) => new Date(a.data || a.date) - new Date(b.data || b.date));
+            
+            new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: sortedData.map(item => {
+                        const date = new Date(item.data || item.date);
+                        return date.toLocaleDateString('pt-BR');
+                    }),
+                    datasets: [{
+                        label: 'ROI (%)',
+                        data: sortedData.map(item => item.roi || item.percentualROI || 0),
+                        borderColor: '#27ae60',
+                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return 'R$ ' + value.toLocaleString('pt-BR');
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
                             }
                         }
                     }
                 }
+            });
+
+            // Monthly Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            const monthlyData = getMonthlyAverages();
+            
+            new Chart(monthlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: monthlyData.labels,
+                    datasets: [{
+                        label: 'ROI Médio (%)',
+                        data: monthlyData.values,
+                        backgroundColor: '#3498db',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Performance Distribution Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceData = getPerformanceDistribution();
+            
+            new Chart(performanceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: performanceData.labels,
+                    datasets: [{
+                        data: performanceData.values,
+                        backgroundColor: ['#27ae60', '#3498db', '#e74c3c'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Helper functions for charts
+        function getMonthlyAverages() {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const monthlyData = {};
+            
+            historicalData.forEach(item => {
+                const date = new Date(item.data || item.date);
+                const month = date.getMonth();
+                const roi = item.roi || item.percentualROI || 0;
+                
+                if (!monthlyData[month]) {
+                    monthlyData[month] = { total: 0, count: 0 };
+                }
+                monthlyData[month].total += roi;
+                monthlyData[month].count++;
+            });
+            
+            const labels = [];
+            const values = [];
+            
+            Object.keys(monthlyData).forEach(month => {
+                labels.push(months[month]);
+                values.push(monthlyData[month].total / monthlyData[month].count);
+            });
+            
+            return { labels, values };
+        }
+
+        function getPerformanceDistribution() {
+            let positive = 0, neutral = 0, negative = 0;
+            
+            historicalData.forEach(item => {
+                const roi = item.roi || item.percentualROI || 0;
+                if (roi > 5) positive++;
+                else if (roi >= 0) neutral++;
+                else negative++;
+            });
+            
+            return {
+                labels: ['Alto (>5%)', 'Médio (0-5%)', 'Baixo (<0%)'],
+                values: [positive, neutral, negative]
+            };
+        }
+
+        // Filter and search functionality
+        function applyFilters() {
+            const dateStart = document.getElementById('dateStart').value;
+            const dateEnd = document.getElementById('dateEnd').value;
+            const roiFilter = document.getElementById('roiFilter').value;
+            const monthFilter = document.getElementById('monthFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            filteredData = historicalData.filter(item => {
+                const itemDate = new Date(item.data || item.date);
+                const roi = item.roi || item.percentualROI || 0;
+                
+                // Date filters
+                if (dateStart && itemDate < new Date(dateStart)) return false;
+                if (dateEnd && itemDate > new Date(dateEnd)) return false;
+                
+                // Month filter
+                if (monthFilter && (itemDate.getMonth() + 1) != monthFilter) return false;
+                
+                // ROI performance filter
+                if (roiFilter) {
+                    switch (roiFilter) {
+                        case 'positive': if (roi <= 0) return false; break;
+                        case 'negative': if (roi >= 0) return false; break;
+                        case 'high': if (roi <= 10) return false; break;
+                        case 'medium': if (roi < 0 || roi > 10) return false; break;
+                        case 'low': if (roi >= 0) return false; break;
+                    }
+                }
+                
+                // Search filter
+                if (searchTerm) {
+                    const searchableText = [
+                        itemDate.toLocaleDateString('pt-BR'),
+                        roi.toString(),
+                        (item.receita || item.revenue || 0).toString(),
+                        (item.custos || item.costs || 0).toString()
+                    ].join(' ').toLowerCase();
+                    
+                    if (!searchableText.includes(searchTerm)) return false;
+                }
+                
+                return true;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function clearFilters() {
+            document.getElementById('dateStart').value = '';
+            document.getElementById('dateEnd').value = '';
+            document.getElementById('roiFilter').value = '';
+            document.getElementById('monthFilter').value = '';
+            document.getElementById('searchInput').value = '';
+            filteredData = [...historicalData];
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Table sorting
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'asc';
             }
+
+            filteredData.sort((a, b) => {
+                let aVal, bVal;
+                
+                switch (column) {
+                    case 'date':
+                        aVal = new Date(a.data || a.date);
+                        bVal = new Date(b.data || b.date);
+                        break;
+                    case 'roi':
+                        aVal = a.roi || a.percentualROI || 0;
+                        bVal = b.roi || b.percentualROI || 0;
+                        break;
+                    case 'revenue':
+                        aVal = a.receita || a.revenue || 0;
+                        bVal = b.receita || b.revenue || 0;
+                        break;
+                    case 'costs':
+                        aVal = a.custos || a.costs || 0;
+                        bVal = b.custos || b.costs || 0;
+                        break;
+                    case 'profit':
+                        aVal = (a.receita || a.revenue || 0) - (a.custos || a.costs || 0);
+                        bVal = (b.receita || b.revenue || 0) - (b.custos || b.costs || 0);
+                        break;
+                    case 'margin':
+                        aVal = ((a.receita || a.revenue || 0) - (a.custos || a.costs || 0)) / (a.receita || a.revenue || 1) * 100;
+                        bVal = ((b.receita || b.revenue || 0) - (b.custos || b.costs || 0)) / (b.receita || b.revenue || 1) * 100;
+                        break;
+                }
+                
+                if (sortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            renderTable();
+        }
+
+        // Table rendering
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const recordsCount = document.getElementById('recordsCount');
+            
+            recordsCount.textContent = `${filteredData.length} registros encontrados`;
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="no-data">Nenhum registro encontrado com os filtros aplicados</td></tr>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+            
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const endIndex = Math.min(startIndex + recordsPerPage, filteredData.length);
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            tbody.innerHTML = pageData.map(item => {
+                const date = new Date(item.data || item.date);
+                const roi = item.roi || item.percentualROI || 0;
+                const revenue = item.receita || item.revenue || 0;
+                const costs = item.custos || item.costs || 0;
+                const profit = revenue - costs;
+                const margin = revenue > 0 ? (profit / revenue * 100) : 0;
+                
+                return `
+                    <tr>
+                        <td>${date.toLocaleDateString('pt-BR')}</td>
+                        <td class="${roi >= 0 ? 'roi-positive' : 'roi-negative'}">${roi.toFixed(2)}%</td>
+                        <td>R$ ${revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                        <td>R$ ${costs.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                        <td class="${profit >= 0 ? 'roi-positive' : 'roi-negative'}">R$ ${profit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                        <td class="${margin >= 0 ? 'roi-positive' : 'roi-negative'}">${margin.toFixed(2)}%</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            renderPagination();
+        }
+
+        // Pagination rendering
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = '<button onclick="changePage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '>‹</button>';
+            
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += '<button onclick="changePage(' + i + ')" class="' + (i === currentPage ? 'active' : '') + '">' + i + '</button>';
+            }
+            
+            html += '<button onclick="changePage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>›</button>';
+            
+            pagination.innerHTML = html;
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderTable();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initOverviewCharts();
+            renderTable();
         });
     </script>
 </body>
