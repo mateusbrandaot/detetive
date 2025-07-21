@@ -150,6 +150,28 @@
             height: 300px;
         }
 
+        .cost-breakdown {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .cost-breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .cost-breakdown-item:last-child {
+            margin-bottom: 0;
+            font-weight: bold;
+            border-top: 1px solid #dee2e6;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
         .historical-section {
             padding: 30px;
             background: #f8f9fa;
@@ -406,21 +428,37 @@
                 
                 <div class="metric-card">
                     <div class="metric-value revenue">
-                        R$ 1.874,20
+                        R$ 1.491,00
                     </div>
                     <div class="metric-label">Faturamento</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value costs">
-                        R$ 0,00
+                        R$ 1.068,925
                     </div>
-                    <div class="metric-label">Custos</div>
+                    <div class="metric-label">Custos Totais</div>
+                    
+                    <div class="cost-breakdown">
+                        <div class="cost-breakdown-item">
+                            <span>Google Ads:</span>
+                            <span>R$ 1.031,703</span>
+                        </div>
+                        <div class="cost-breakdown-item">
+                            <span>APIs Externas:</span>
+                            <span>R$ 37,222</span>
+                        </div>
+                        <div class="cost-breakdown-item">
+                            <span>Total:</span>
+                            <span>R$ 1.068,925</span>
+                        </div>
+                    </div>
+                    
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value profit">
-                        R$ 1.874,20
+                        R$ 422,075
                     </div>
                     <div class="metric-label">Resultado Líquido</div>
                 </div>
@@ -548,15 +586,24 @@
         
         <div class="footer">
             <div class="timestamp">
-                Última atualização: 21/07/2025, 17:43:17 | 
-                0 registros históricos disponíveis
+                Última atualização: 21/07/2025, 17:48:24 | 
+                1 registros históricos disponíveis
             </div>
         </div>
     </div>
 
     <script>
-        // Global data
-        const historicalData = [];
+        // Global data with corrected cost values
+        const historicalData = [{"date":"2025-07-21","time":"16:59","dayOfWeek":"segunda-feira","roiPercentage":"139.49%","netResult":"422,075391","revenue":"1491","googleAdsCosts":"1031,702609","apiCosts":"37,222","totalCosts":"1068,924609","sheetName":"Julho 2025","month":"Julho","year":2025,"timestamp":1753117140000}];
+        const currentMetrics = {
+            roi: 0,
+            revenue: 1491.000000000002,
+            totalCosts: 1068.924609,
+            googleAdsCost: 1031.702609,
+            externalApiCost: 37.222,
+            netProfit: 422.0753910000021
+        };
+        
         let filteredData = [...historicalData];
         let sortColumn = '';
         let sortDirection = 'asc';
@@ -587,16 +634,16 @@
             }, 100);
         }
 
-        // Initialize overview charts
+        // Initialize overview charts with corrected cost values
         function initOverviewCharts() {
             // Pie Chart
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             new Chart(pieCtx, {
                 type: 'pie',
                 data: {
-                    labels: ['Receita', 'Custos'],
+                    labels: ['Receita', 'Custos Totais'],
                     datasets: [{
-                        data: [1874.2000000000046, 0],
+                        data: [currentMetrics.revenue, currentMetrics.totalCosts],
                         backgroundColor: ['#3498db', '#e67e22'],
                         borderWidth: 2,
                         borderColor: '#fff'
@@ -606,20 +653,35 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom' }
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed;
+                                    return label + ': R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                                }
+                            }
+                        }
                     }
                 }
             });
 
-            // Bar Chart
+            // Bar Chart with cost breakdown
             const barCtx = document.getElementById('barChart').getContext('2d');
             new Chart(barCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Faturamento', 'Custos', 'Resultado Líquido'],
+                    labels: ['Faturamento', 'Google Ads', 'APIs Externas', 'Custos Totais', 'Resultado Líquido'],
                     datasets: [{
-                        data: [1874.2000000000046, 0, 1874.2000000000046],
-                        backgroundColor: ['#3498db', '#e67e22', '#9b59b6'],
+                        data: [
+                            currentMetrics.revenue, 
+                            currentMetrics.googleAdsCost, 
+                            currentMetrics.externalApiCost, 
+                            currentMetrics.totalCosts, 
+                            currentMetrics.netProfit
+                        ],
+                        backgroundColor: ['#3498db', '#f39c12', '#e67e22', '#e74c3c', '#9b59b6'],
                         borderWidth: 0,
                         borderRadius: 5
                     }]
@@ -627,7 +689,17 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed.y;
+                                    return 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                                }
+                            }
+                        }
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -823,7 +895,7 @@
                         itemDate.toLocaleDateString('pt-BR'),
                         roi.toString(),
                         (item.receita || item.revenue || 0).toString(),
-                        (item.custos || item.costs || 0).toString()
+                        (item.custos || item.costs || item.total_costs || 0).toString()
                     ].join(' ').toLowerCase();
                     
                     if (!searchableText.includes(searchTerm)) return false;
@@ -847,7 +919,7 @@
             renderTable();
         }
 
-        // Table sorting
+        // Table sorting with corrected cost field handling
         function sortTable(column) {
             if (sortColumn === column) {
                 sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -873,16 +945,25 @@
                         bVal = b.receita || b.revenue || 0;
                         break;
                     case 'costs':
-                        aVal = a.custos || a.costs || 0;
-                        bVal = b.custos || b.costs || 0;
+                        // Prioritize total_costs, then fall back to individual cost fields
+                        aVal = a.total_costs || a.custos || a.costs || ((a.google_ads_cost || 0) + (a.external_api_cost || 0)) || 0;
+                        bVal = b.total_costs || b.custos || b.costs || ((b.google_ads_cost || 0) + (b.external_api_cost || 0)) || 0;
                         break;
                     case 'profit':
-                        aVal = (a.receita || a.revenue || 0) - (a.custos || a.costs || 0);
-                        bVal = (b.receita || b.revenue || 0) - (b.custos || b.costs || 0);
+                        const aRevenue = a.receita || a.revenue || 0;
+                        const aCosts = a.total_costs || a.custos || a.costs || ((a.google_ads_cost || 0) + (a.external_api_cost || 0)) || 0;
+                        const bRevenue = b.receita || b.revenue || 0;
+                        const bCosts = b.total_costs || b.custos || b.costs || ((b.google_ads_cost || 0) + (b.external_api_cost || 0)) || 0;
+                        aVal = aRevenue - aCosts;
+                        bVal = bRevenue - bCosts;
                         break;
                     case 'margin':
-                        aVal = ((a.receita || a.revenue || 0) - (a.custos || a.costs || 0)) / (a.receita || a.revenue || 1) * 100;
-                        bVal = ((b.receita || b.revenue || 0) - (b.custos || b.costs || 0)) / (b.receita || b.revenue || 1) * 100;
+                        const aRev = a.receita || a.revenue || 0;
+                        const aCost = a.total_costs || a.custos || a.costs || ((a.google_ads_cost || 0) + (a.external_api_cost || 0)) || 0;
+                        const bRev = b.receita || b.revenue || 0;
+                        const bCost = b.total_costs || b.custos || b.costs || ((b.google_ads_cost || 0) + (b.external_api_cost || 0)) || 0;
+                        aVal = aRev > 0 ? ((aRev - aCost) / aRev * 100) : 0;
+                        bVal = bRev > 0 ? ((bRev - bCost) / bRev * 100) : 0;
                         break;
                 }
                 
@@ -896,7 +977,7 @@
             renderTable();
         }
 
-        // Table rendering
+        // Table rendering with corrected cost calculations
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             const recordsCount = document.getElementById('recordsCount');
@@ -917,7 +998,8 @@
                 const date = new Date(item.data || item.date);
                 const roi = item.roi || item.percentualROI || 0;
                 const revenue = item.receita || item.revenue || 0;
-                const costs = item.custos || item.costs || 0;
+                // Correctly extract costs using the same priority as sorting
+                const costs = item.total_costs || item.custos || item.costs || ((item.google_ads_cost || 0) + (item.external_api_cost || 0)) || 0;
                 const profit = revenue - costs;
                 const margin = revenue > 0 ? (profit / revenue * 100) : 0;
                 
