@@ -150,28 +150,6 @@
             height: 300px;
         }
 
-        .cost-breakdown {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 0.9em;
-        }
-
-        .cost-breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-
-        .cost-breakdown-item:last-child {
-            margin-bottom: 0;
-            font-weight: bold;
-            border-top: 1px solid #dee2e6;
-            padding-top: 8px;
-            margin-top: 8px;
-        }
-
         .historical-section {
             padding: 30px;
             background: #f8f9fa;
@@ -428,37 +406,21 @@
                 
                 <div class="metric-card">
                     <div class="metric-value revenue">
-                        R$ 1.491,00
+                        R$ 1.874,20
                     </div>
                     <div class="metric-label">Faturamento</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value costs">
-                        R$ 1.068,925
+                        R$ 0,00
                     </div>
-                    <div class="metric-label">Custos Totais</div>
-                    
-                    <div class="cost-breakdown">
-                        <div class="cost-breakdown-item">
-                            <span>Google Ads:</span>
-                            <span>R$ 1.031,703</span>
-                        </div>
-                        <div class="cost-breakdown-item">
-                            <span>APIs Externas:</span>
-                            <span>R$ 37,222</span>
-                        </div>
-                        <div class="cost-breakdown-item">
-                            <span>Total:</span>
-                            <span>R$ 1.068,925</span>
-                        </div>
-                    </div>
-                    
+                    <div class="metric-label">Custos</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value profit">
-                        R$ 422,075
+                        R$ 1.874,20
                     </div>
                     <div class="metric-label">Resultado Líquido</div>
                 </div>
@@ -586,15 +548,15 @@
         
         <div class="footer">
             <div class="timestamp">
-                Última atualização: 21/07/2025, 17:40:03 | 
-                1 registros históricos disponíveis
+                Última atualização: 21/07/2025, 17:43:17 | 
+                0 registros históricos disponíveis
             </div>
         </div>
     </div>
 
     <script>
         // Global data
-        const historicalData = [{"date":"2025-07-21","time":"16:59","dayOfWeek":"segunda-feira","roiPercentage":"139.49%","netResult":"422,075391","revenue":"1491","googleAdsCosts":"1031,702609","apiCosts":"37,222","totalCosts":"1068,924609","sheetName":"Julho 2025","month":"Julho","year":2025,"timestamp":1753117140000}];
+        const historicalData = [];
         let filteredData = [...historicalData];
         let sortColumn = '';
         let sortDirection = 'asc';
@@ -634,7 +596,7 @@
                 data: {
                     labels: ['Receita', 'Custos'],
                     datasets: [{
-                        data: [1491.000000000002, 1068.924609],
+                        data: [1874.2000000000046, 0],
                         backgroundColor: ['#3498db', '#e67e22'],
                         borderWidth: 2,
                         borderColor: '#fff'
@@ -656,7 +618,7 @@
                 data: {
                     labels: ['Faturamento', 'Custos', 'Resultado Líquido'],
                     datasets: [{
-                        data: [1491.000000000002, 1068.924609, 422.0753910000021],
+                        data: [1874.2000000000046, 0, 1874.2000000000046],
                         backgroundColor: ['#3498db', '#e67e22', '#9b59b6'],
                         borderWidth: 0,
                         borderRadius: 5
@@ -861,7 +823,7 @@
                         itemDate.toLocaleDateString('pt-BR'),
                         roi.toString(),
                         (item.receita || item.revenue || 0).toString(),
-                        (item.custos || item.costs || item.total_costs || 0).toString()
+                        (item.custos || item.costs || 0).toString()
                     ].join(' ').toLowerCase();
                     
                     if (!searchableText.includes(searchTerm)) return false;
@@ -911,16 +873,16 @@
                         bVal = b.receita || b.revenue || 0;
                         break;
                     case 'costs':
-                        aVal = a.custos || a.costs || a.total_costs || 0;
-                        bVal = b.custos || b.costs || b.total_costs || 0;
+                        aVal = a.custos || a.costs || 0;
+                        bVal = b.custos || b.costs || 0;
                         break;
                     case 'profit':
-                        aVal = (a.receita || a.revenue || 0) - (a.custos || a.costs || a.total_costs || 0);
-                        bVal = (b.receita || b.revenue || 0) - (b.custos || b.costs || b.total_costs || 0);
+                        aVal = (a.receita || a.revenue || 0) - (a.custos || a.costs || 0);
+                        bVal = (b.receita || b.revenue || 0) - (b.custos || b.costs || 0);
                         break;
                     case 'margin':
-                        aVal = ((a.receita || a.revenue || 0) - (a.custos || a.costs || a.total_costs || 0)) / (a.receita || a.revenue || 1) * 100;
-                        bVal = ((b.receita || b.revenue || 0) - (b.custos || b.costs || b.total_costs || 0)) / (b.receita || b.revenue || 1) * 100;
+                        aVal = ((a.receita || a.revenue || 0) - (a.custos || a.costs || 0)) / (a.receita || a.revenue || 1) * 100;
+                        bVal = ((b.receita || b.revenue || 0) - (b.custos || b.costs || 0)) / (b.receita || b.revenue || 1) * 100;
                         break;
                 }
                 
@@ -955,7 +917,7 @@
                 const date = new Date(item.data || item.date);
                 const roi = item.roi || item.percentualROI || 0;
                 const revenue = item.receita || item.revenue || 0;
-                const costs = item.custos || item.costs || item.total_costs || 0;
+                const costs = item.custos || item.costs || 0;
                 const profit = revenue - costs;
                 const margin = revenue > 0 ? (profit / revenue * 100) : 0;
                 
