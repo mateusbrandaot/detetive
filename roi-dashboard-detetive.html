@@ -82,6 +82,22 @@
         .tab-content.active {
             display: block;
         }
+
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #495057;
+        }
+
+        .debug-info h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
         
         .metrics-grid {
             display: grid;
@@ -148,6 +164,28 @@
         .chart-container {
             position: relative;
             height: 300px;
+        }
+
+        .cost-breakdown {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .cost-breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .cost-breakdown-item:last-child {
+            margin-bottom: 0;
+            font-weight: bold;
+            border-top: 1px solid #dee2e6;
+            padding-top: 8px;
+            margin-top: 8px;
         }
 
         .historical-section {
@@ -380,7 +418,17 @@
     <div class="container">
         <div class="header">
             <h1>Dashboard ROI - Detetive Veicular</h1>
-            <p>Dashboard completo de análise de ROI com dados históricos e filtragem avançada</p>
+            <p>Dashboard completo de análise de ROI com valores corrigidos</p>
+        </div>
+
+        <div class="debug-info">
+            <h4>Debug - Valores Extraídos:</h4>
+            <p><strong>Total Costs:</strong> 1701.5510849999998</p>
+            <p><strong>Google Ads Cost:</strong> 1638.173085</p>
+            <p><strong>External API Cost:</strong> 63.378</p>
+            <p><strong>Revenue:</strong> 2454.9000000000083</p>
+            <p><strong>ROI:</strong> 144.27%</p>
+            <p><strong>Net Profit:</strong> 753.3489150000084</p>
         </div>
 
         <div class="nav-tabs">
@@ -399,28 +447,44 @@
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-value roi-positive">
-                        0.00%
+                        144.27%
                     </div>
                     <div class="metric-label">ROI Atual</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value revenue">
-                        R$ 2.360,60
+                        R$ 2.454,90
                     </div>
                     <div class="metric-label">Faturamento</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value costs">
-                        R$ 0,00
+                        R$ 1.701,551
                     </div>
-                    <div class="metric-label">Custos</div>
+                    <div class="metric-label">Custos Totais</div>
+                    
+                    <div class="cost-breakdown">
+                        <div class="cost-breakdown-item">
+                            <span>Google Ads:</span>
+                            <span>R$ 1.638,173</span>
+                        </div>
+                        <div class="cost-breakdown-item">
+                            <span>APIs Externas:</span>
+                            <span>R$ 63,378</span>
+                        </div>
+                        <div class="cost-breakdown-item">
+                            <span>Total:</span>
+                            <span>R$ 1.701,551</span>
+                        </div>
+                    </div>
+                    
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value profit">
-                        R$ 2.360,60
+                        R$ 753,349
                     </div>
                     <div class="metric-label">Resultado Líquido</div>
                 </div>
@@ -548,15 +612,28 @@
         
         <div class="footer">
             <div class="timestamp">
-                Última atualização: 21/07/2025, 18:35:09 | 
+                Última atualização: 21/07/2025, 18:54:40 | 
                 0 registros históricos disponíveis
             </div>
         </div>
     </div>
 
     <script>
-        // Global data
+        // Global data with corrected numeric values
         const historicalData = [];
+        const currentMetrics = {
+            roi: 144.27,
+            revenue: 2454.9000000000083,
+            totalCosts: 1701.5510849999998,
+            googleAdsCost: 1638.173085,
+            externalApiCost: 63.378,
+            netProfit: 753.3489150000084
+        };
+        
+        // Debug logging
+        console.log("JavaScript currentMetrics:", currentMetrics);
+        console.log("JavaScript historicalData length:", historicalData.length);
+        
         let filteredData = [...historicalData];
         let sortColumn = '';
         let sortDirection = 'asc';
@@ -587,160 +664,201 @@
             }, 100);
         }
 
-        // Initialize overview charts
+        // Initialize overview charts with corrected values
         function initOverviewCharts() {
-            // Pie Chart
-            const pieCtx = document.getElementById('pieChart').getContext('2d');
-            new Chart(pieCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['Receita', 'Custos'],
-                    datasets: [{
-                        data: [2360.6000000000076, 0],
-                        backgroundColor: ['#3498db', '#e67e22'],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-
-            // Bar Chart
-            const barCtx = document.getElementById('barChart').getContext('2d');
-            new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Faturamento', 'Custos', 'Resultado Líquido'],
-                    datasets: [{
-                        data: [2360.6000000000076, 0, 2360.6000000000076],
-                        backgroundColor: ['#3498db', '#e67e22', '#9b59b6'],
-                        borderWidth: 0,
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return 'R$ ' + value.toLocaleString('pt-BR');
+            // Clear existing charts
+            const pieCanvas = document.getElementById('pieChart');
+            const barCanvas = document.getElementById('barChart');
+            
+            if (pieCanvas && barCanvas) {
+                // Pie Chart
+                const pieCtx = pieCanvas.getContext('2d');
+                new Chart(pieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Receita', 'Custos Totais'],
+                        datasets: [{
+                            data: [currentMetrics.revenue, currentMetrics.totalCosts],
+                            backgroundColor: ['#3498db', '#e67e22'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        return label + ': R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+
+                // Bar Chart with cost breakdown
+                const barCtx = barCanvas.getContext('2d');
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Faturamento', 'Google Ads', 'APIs Externas', 'Custos Totais', 'Resultado Líquido'],
+                        datasets: [{
+                            data: [
+                                currentMetrics.revenue, 
+                                currentMetrics.googleAdsCost, 
+                                currentMetrics.externalApiCost, 
+                                currentMetrics.totalCosts, 
+                                currentMetrics.netProfit
+                            ],
+                            backgroundColor: ['#3498db', '#f39c12', '#e67e22', '#e74c3c', '#9b59b6'],
+                            borderWidth: 0,
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.parsed.y;
+                                        return 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'R$ ' + value.toLocaleString('pt-BR');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         // Initialize trend charts
         function initTrendCharts() {
             if (historicalData.length === 0) return;
 
-            // Line Chart - ROI Evolution
-            const lineCtx = document.getElementById('lineChart').getContext('2d');
-            const sortedData = [...historicalData].sort((a, b) => new Date(a.data || a.date) - new Date(b.data || b.date));
-            
-            new Chart(lineCtx, {
-                type: 'line',
-                data: {
-                    labels: sortedData.map(item => {
-                        const date = new Date(item.data || item.date);
-                        return date.toLocaleDateString('pt-BR');
-                    }),
-                    datasets: [{
-                        label: 'ROI (%)',
-                        data: sortedData.map(item => item.roi || item.percentualROI || 0),
-                        borderColor: '#27ae60',
-                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
+            const lineCanvas = document.getElementById('lineChart');
+            const monthlyCanvas = document.getElementById('monthlyChart');
+            const performanceCanvas = document.getElementById('performanceChart');
+
+            if (lineCanvas) {
+                // Line Chart - ROI Evolution
+                const lineCtx = lineCanvas.getContext('2d');
+                const sortedData = [...historicalData].sort((a, b) => new Date(a.data || a.date) - new Date(b.data || b.date));
+                
+                new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: sortedData.map(item => {
+                            const date = new Date(item.data || item.date);
+                            return date.toLocaleDateString('pt-BR');
+                        }),
+                        datasets: [{
+                            label: 'ROI (%)',
+                            data: sortedData.map(item => parseFloat(item.roi_raw_percentage || item.roi || item.percentualROI || 0)),
+                            borderColor: '#27ae60',
+                            backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
 
-            // Monthly Chart
-            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-            const monthlyData = getMonthlyAverages();
-            
-            new Chart(monthlyCtx, {
-                type: 'bar',
-                data: {
-                    labels: monthlyData.labels,
-                    datasets: [{
-                        label: 'ROI Médio (%)',
-                        data: monthlyData.values,
-                        backgroundColor: '#3498db',
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
+            if (monthlyCanvas) {
+                // Monthly Chart
+                const monthlyCtx = monthlyCanvas.getContext('2d');
+                const monthlyData = getMonthlyAverages();
+                
+                new Chart(monthlyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: monthlyData.labels,
+                        datasets: [{
+                            label: 'ROI Médio (%)',
+                            data: monthlyData.values,
+                            backgroundColor: '#3498db',
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
 
-            // Performance Distribution Chart
-            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
-            const performanceData = getPerformanceDistribution();
-            
-            new Chart(performanceCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: performanceData.labels,
-                    datasets: [{
-                        data: performanceData.values,
-                        backgroundColor: ['#27ae60', '#3498db', '#e74c3c'],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
+            if (performanceCanvas) {
+                // Performance Distribution Chart
+                const performanceCtx = performanceCanvas.getContext('2d');
+                const performanceData = getPerformanceDistribution();
+                
+                new Chart(performanceCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: performanceData.labels,
+                        datasets: [{
+                            data: performanceData.values,
+                            backgroundColor: ['#27ae60', '#3498db', '#e74c3c'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         // Helper functions for charts
@@ -751,7 +869,7 @@
             historicalData.forEach(item => {
                 const date = new Date(item.data || item.date);
                 const month = date.getMonth();
-                const roi = item.roi || item.percentualROI || 0;
+                const roi = parseFloat(item.roi_raw_percentage || item.roi || item.percentualROI || 0);
                 
                 if (!monthlyData[month]) {
                     monthlyData[month] = { total: 0, count: 0 };
@@ -775,7 +893,7 @@
             let positive = 0, neutral = 0, negative = 0;
             
             historicalData.forEach(item => {
-                const roi = item.roi || item.percentualROI || 0;
+                const roi = parseFloat(item.roi_raw_percentage || item.roi || item.percentualROI || 0);
                 if (roi > 5) positive++;
                 else if (roi >= 0) neutral++;
                 else negative++;
@@ -797,7 +915,7 @@
 
             filteredData = historicalData.filter(item => {
                 const itemDate = new Date(item.data || item.date);
-                const roi = item.roi || item.percentualROI || 0;
+                const roi = parseFloat(item.roi_raw_percentage || item.roi || item.percentualROI || 0);
                 
                 // Date filters
                 if (dateStart && itemDate < new Date(dateStart)) return false;
@@ -819,11 +937,13 @@
                 
                 // Search filter
                 if (searchTerm) {
+                    const revenue = parseFloat(item.receita || item.revenue || 0);
+                    const costs = parseFloat(item.total_costs || item.custos || item.costs || 0);
                     const searchableText = [
                         itemDate.toLocaleDateString('pt-BR'),
                         roi.toString(),
-                        (item.receita || item.revenue || 0).toString(),
-                        (item.custos || item.costs || 0).toString()
+                        revenue.toString(),
+                        costs.toString()
                     ].join(' ').toLowerCase();
                     
                     if (!searchableText.includes(searchTerm)) return false;
@@ -847,7 +967,7 @@
             renderTable();
         }
 
-        // Table sorting
+        // Table sorting with robust cost handling
         function sortTable(column) {
             if (sortColumn === column) {
                 sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -865,24 +985,32 @@
                         bVal = new Date(b.data || b.date);
                         break;
                     case 'roi':
-                        aVal = a.roi || a.percentualROI || 0;
-                        bVal = b.roi || b.percentualROI || 0;
+                        aVal = parseFloat(a.roi_raw_percentage || a.roi || a.percentualROI || 0);
+                        bVal = parseFloat(b.roi_raw_percentage || b.roi || b.percentualROI || 0);
                         break;
                     case 'revenue':
-                        aVal = a.receita || a.revenue || 0;
-                        bVal = b.receita || b.revenue || 0;
+                        aVal = parseFloat(a.receita || a.revenue || 0);
+                        bVal = parseFloat(b.receita || b.revenue || 0);
                         break;
                     case 'costs':
-                        aVal = a.custos || a.costs || 0;
-                        bVal = b.custos || b.costs || 0;
+                        aVal = parseFloat(a.total_costs || a.custos || a.costs || 0);
+                        bVal = parseFloat(b.total_costs || b.custos || b.costs || 0);
                         break;
                     case 'profit':
-                        aVal = (a.receita || a.revenue || 0) - (a.custos || a.costs || 0);
-                        bVal = (b.receita || b.revenue || 0) - (b.custos || b.costs || 0);
+                        const aRevenue = parseFloat(a.receita || a.revenue || 0);
+                        const aCosts = parseFloat(a.total_costs || a.custos || a.costs || 0);
+                        const bRevenue = parseFloat(b.receita || b.revenue || 0);
+                        const bCosts = parseFloat(b.total_costs || b.custos || b.costs || 0);
+                        aVal = aRevenue - aCosts;
+                        bVal = bRevenue - bCosts;
                         break;
                     case 'margin':
-                        aVal = ((a.receita || a.revenue || 0) - (a.custos || a.costs || 0)) / (a.receita || a.revenue || 1) * 100;
-                        bVal = ((b.receita || b.revenue || 0) - (b.custos || b.costs || 0)) / (b.receita || b.revenue || 1) * 100;
+                        const aRev = parseFloat(a.receita || a.revenue || 0);
+                        const aCost = parseFloat(a.total_costs || a.custos || a.costs || 0);
+                        const bRev = parseFloat(b.receita || b.revenue || 0);
+                        const bCost = parseFloat(b.total_costs || b.custos || b.costs || 0);
+                        aVal = aRev > 0 ? ((aRev - aCost) / aRev * 100) : 0;
+                        bVal = bRev > 0 ? ((bRev - bCost) / bRev * 100) : 0;
                         break;
                 }
                 
@@ -896,7 +1024,7 @@
             renderTable();
         }
 
-        // Table rendering
+        // Table rendering with robust numeric handling
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             const recordsCount = document.getElementById('recordsCount');
@@ -915,9 +1043,9 @@
             
             tbody.innerHTML = pageData.map(item => {
                 const date = new Date(item.data || item.date);
-                const roi = item.roi || item.percentualROI || 0;
-                const revenue = item.receita || item.revenue || 0;
-                const costs = item.custos || item.costs || 0;
+                const roi = parseFloat(item.roi_raw_percentage || item.roi || item.percentualROI || 0);
+                const revenue = parseFloat(item.receita || item.revenue || 0);
+                const costs = parseFloat(item.total_costs || item.custos || item.costs || 0);
                 const profit = revenue - costs;
                 const margin = revenue > 0 ? (profit / revenue * 100) : 0;
                 
@@ -970,8 +1098,11 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            initOverviewCharts();
-            renderTable();
+            console.log("DOM loaded, initializing dashboard...");
+            setTimeout(() => {
+                initOverviewCharts();
+                renderTable();
+            }, 500);
         });
     </script>
 </body>
