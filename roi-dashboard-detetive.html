@@ -418,17 +418,18 @@
     <div class="container">
         <div class="header">
             <h1>Dashboard ROI - Detetive Veicular</h1>
-            <p>Dashboard completo de análise de ROI com valores corrigidos</p>
+            <p>Dashboard completo de análise de ROI com CheckTudo e valores corrigidos</p>
         </div>
 
         <div class="debug-info">
             <h4>Debug - Valores Extraídos:</h4>
-            <p><strong>Total Costs:</strong> 6471.715257</p>
-            <p><strong>Google Ads Cost:</strong> 1732.707257</p>
-            <p><strong>External API Cost:</strong> 68.408</p>
-            <p><strong>Revenue:</strong> 2549.200000000009</p>
-            <p><strong>ROI:</strong> 39.39%</p>
-            <p><strong>Net Profit:</strong> -3922.515256999991</p>
+            <p><strong>Total Costs:</strong> 5738.6246089999995</p>
+            <p><strong>Google Ads Cost:</strong> 1031.702609</p>
+            <p><strong>External API Cost:</strong> 37.222</p>
+            <p><strong>CheckTudo Cost:</strong> 4669.7</p>
+            <p><strong>Revenue:</strong> 1491.000000000002</p>
+            <p><strong>ROI:</strong> 25.98%</p>
+            <p><strong>Net Profit:</strong> -4247.624608999998</p>
         </div>
 
         <div class="nav-tabs">
@@ -447,36 +448,46 @@
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-value roi-positive">
-                        39.39%
+                        25.98%
                     </div>
                     <div class="metric-label">ROI Atual</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value revenue">
-                        R$ 2.549,20
+                        R$ 1.491,00
                     </div>
                     <div class="metric-label">Faturamento</div>
                 </div>
                 
                 <div class="metric-card">
                     <div class="metric-value costs">
-                        R$ 6.471,715
+                        R$ 5.738,625
                     </div>
                     <div class="metric-label">Custos Totais</div>
                     
                     <div class="cost-breakdown">
+                        
                         <div class="cost-breakdown-item">
                             <span>Google Ads:</span>
-                            <span>R$ 1.732,707</span>
+                            <span>R$ 1.031,703</span>
                         </div>
+                        
+                        
                         <div class="cost-breakdown-item">
                             <span>APIs Externas:</span>
-                            <span>R$ 68,408</span>
+                            <span>R$ 37,222</span>
                         </div>
+                        
+                        
+                        <div class="cost-breakdown-item">
+                            <span>CheckTudo:</span>
+                            <span>R$ 4.669,70</span>
+                        </div>
+                        
                         <div class="cost-breakdown-item">
                             <span>Total:</span>
-                            <span>R$ 6.471,715</span>
+                            <span>R$ 5.738,625</span>
                         </div>
                     </div>
                     
@@ -484,7 +495,7 @@
                 
                 <div class="metric-card">
                     <div class="metric-value profit">
-                        R$ -3.922,515
+                        R$ -4.247,625
                     </div>
                     <div class="metric-label">Resultado Líquido</div>
                 </div>
@@ -612,22 +623,23 @@
         
         <div class="footer">
             <div class="timestamp">
-                Última atualização: 21/07/2025, 19:13:18 | 
+                Última atualização: 21/07/2025, 19:19:06 | 
                 1 registros históricos disponíveis
             </div>
         </div>
     </div>
 
     <script>
-        // Global data with corrected numeric values
-        const historicalData = [{"date":"2025-07-21","time":"18:54","dayOfWeek":"segunda-feira","roiPercentage":"144.27%","netResult":"753,348915","revenue":"2454,9","googleAdsCosts":"1638,173085","apiCosts":"63,378","totalCosts":"1701,551085","sheetName":"Julho 2025","month":"Julho","year":2025,"timestamp":1753124040000}];
+        // Global data with corrected numeric values including CheckTudo
+        const historicalData = [{"date":"2025-07-21","time":"16:59","dayOfWeek":"segunda-feira","roiPercentage":"139.49%","netResult":"422,075391","revenue":"1491","googleAdsCosts":"1031,702609","apiCosts":"37,222","totalCosts":"1068,924609","sheetName":"Julho 2025","month":"Julho","year":2025,"timestamp":1753117140000}];
         const currentMetrics = {
-            roi: 39.39,
-            revenue: 2549.200000000009,
-            totalCosts: 6471.715257,
-            googleAdsCost: 1732.707257,
-            externalApiCost: 68.408,
-            netProfit: -3922.515256999991
+            roi: 25.98,
+            revenue: 1491.000000000002,
+            totalCosts: 5738.6246089999995,
+            googleAdsCost: 1031.702609,
+            externalApiCost: 37.222,
+            checkTudoCost: 4669.7,
+            netProfit: -4247.624608999998
         };
         
         // Debug logging
@@ -664,14 +676,14 @@
             }, 100);
         }
 
-        // Initialize overview charts with corrected values
+        // Initialize overview charts with corrected values including CheckTudo
         function initOverviewCharts() {
             // Clear existing charts
             const pieCanvas = document.getElementById('pieChart');
             const barCanvas = document.getElementById('barChart');
             
             if (pieCanvas && barCanvas) {
-                // Pie Chart
+                // Pie Chart - Revenue vs Total Costs
                 const pieCtx = pieCanvas.getContext('2d');
                 new Chart(pieCtx, {
                     type: 'pie',
@@ -702,21 +714,41 @@
                     }
                 });
 
-                // Bar Chart with cost breakdown
+                // Bar Chart with cost breakdown including CheckTudo
                 const barCtx = barCanvas.getContext('2d');
+                const chartLabels = ['Faturamento'];
+                const chartData = [currentMetrics.revenue];
+                const chartColors = ['#3498db'];
+                
+                if (currentMetrics.googleAdsCost > 0) {
+                    chartLabels.push('Google Ads');
+                    chartData.push(currentMetrics.googleAdsCost);
+                    chartColors.push('#f39c12');
+                }
+                
+                if (currentMetrics.externalApiCost > 0) {
+                    chartLabels.push('APIs Externas');
+                    chartData.push(currentMetrics.externalApiCost);
+                    chartColors.push('#e67e22');
+                }
+                
+                if (currentMetrics.checkTudoCost > 0) {
+                    chartLabels.push('CheckTudo');
+                    chartData.push(currentMetrics.checkTudoCost);
+                    chartColors.push('#8e44ad');
+                }
+                
+                chartLabels.push('Custos Totais', 'Resultado Líquido');
+                chartData.push(currentMetrics.totalCosts, currentMetrics.netProfit);
+                chartColors.push('#e74c3c', '#9b59b6');
+                
                 new Chart(barCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Faturamento', 'Google Ads', 'APIs Externas', 'Custos Totais', 'Resultado Líquido'],
+                        labels: chartLabels,
                         datasets: [{
-                            data: [
-                                currentMetrics.revenue, 
-                                currentMetrics.googleAdsCost, 
-                                currentMetrics.externalApiCost, 
-                                currentMetrics.totalCosts, 
-                                currentMetrics.netProfit
-                            ],
-                            backgroundColor: ['#3498db', '#f39c12', '#e67e22', '#e74c3c', '#9b59b6'],
+                            data: chartData,
+                            backgroundColor: chartColors,
                             borderWidth: 0,
                             borderRadius: 5
                         }]
@@ -967,7 +999,7 @@
             renderTable();
         }
 
-        // Table sorting with robust cost handling
+        // Table sorting with robust cost handling including CheckTudo
         function sortTable(column) {
             if (sortColumn === column) {
                 sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
