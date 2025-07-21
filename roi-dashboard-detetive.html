@@ -164,28 +164,28 @@
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-value roi-positive">
-                    128.19%
+                    0.00%
                 </div>
                 <div class="metric-label">ROI</div>
             </div>
             
             <div class="metric-card">
                 <div class="metric-value revenue">
-                    R$ 662.0999999999995
+                    R$ 662,10
                 </div>
                 <div class="metric-label">Faturamento</div>
             </div>
             
             <div class="metric-card">
                 <div class="metric-value costs">
-                    R$ 516.486783
+                    R$ 0,00
                 </div>
                 <div class="metric-label">Custos</div>
             </div>
             
             <div class="metric-card">
                 <div class="metric-value profit">
-                    R$ 145.6132169999995
+                    R$ 662,10
                 </div>
                 <div class="metric-label">Resultado Líquido</div>
             </div>
@@ -216,7 +216,7 @@
         
         <div class="footer">
             <div class="timestamp">
-                Última atualização: 21/07/2025, 16:32:52
+                Última atualização: 21/07/2025, 16:48:20
             </div>
         </div>
     </div>
@@ -229,7 +229,7 @@
             data: {
                 labels: ['Receita', 'Custos'],
                 datasets: [{
-                    data: [662.0999999999995, 516.486783],
+                    data: [662.0999999999995, 0],
                     backgroundColor: ['#3498db', '#e67e22'],
                     borderWidth: 2,
                     borderColor: '#fff'
@@ -246,17 +246,26 @@
             }
         });
 
-        // Line Chart - Evolução do ROI
+        // Line Chart - Evolução do ROI (simulada se não houver dados mensais)
         const lineCtx = document.getElementById('lineChart').getContext('2d');
-        const roiValue = 128.19;
+        const monthlyData = [];
+        const hasMonthlyData = monthlyData && monthlyData.length > 0;
         
+        const lineLabels = hasMonthlyData 
+            ? monthlyData.map(item => item.mes || item.month || item.label)
+            : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+            
+        const roiValues = hasMonthlyData
+            ? monthlyData.map(item => item.roi || item.percentualROI || 0)
+            : [0, 0, 0, 0, 0, 0];
+
         new Chart(lineCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                labels: lineLabels,
                 datasets: [{
                     label: 'ROI (%)',
-                    data: [roiValue * 0.7, roiValue * 0.8, roiValue * 0.9, roiValue * 0.95, roiValue * 0.98, roiValue],
+                    data: roiValues,
                     borderColor: '#27ae60',
                     backgroundColor: 'rgba(39, 174, 96, 0.1)',
                     borderWidth: 3,
@@ -292,7 +301,7 @@
             data: {
                 labels: ['Faturamento', 'Custos', 'Resultado Líquido'],
                 datasets: [{
-                    data: [662.0999999999995, 516.486783, 145.6132169999995],
+                    data: [662.0999999999995, 0, 662.0999999999995],
                     backgroundColor: ['#3498db', '#e67e22', '#9b59b6'],
                     borderWidth: 0,
                     borderRadius: 5
